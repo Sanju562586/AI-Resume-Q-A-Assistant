@@ -1,28 +1,34 @@
-# ── Core Framework ─────────────────────────────────────────────
+# ── Core Framework ─────────────────────────────────────────────────────────────
 fastapi==0.111.0
 uvicorn[standard]==0.29.0
 python-multipart==0.0.9
 
-# ── Document Parsing ────────────────────────────────────────────
+# ── Document Parsing ───────────────────────────────────────────────────────────
 pdfplumber==0.11.0
 python-docx==1.1.2
+PyPDF2==3.0.1
 
-# ── LangChain ───────────────────────────────────────────────────
+# ── LangChain (text splitting) ─────────────────────────────────────────────────
 langchain==0.2.6
 langchain-community==0.2.6
 langchain-core==0.2.10
 
-# ── Embeddings ──────────────────────────────────────────────────
+# ── Embeddings ─────────────────────────────────────────────────────────────────
 sentence-transformers==3.0.1
+torch>=2.0.0          # pulled in by sentence-transformers; explicit pin avoids surprises
 
-# ── Vector Database ─────────────────────────────────────────────
+# ── Vector Database ────────────────────────────────────────────────────────────
 faiss-cpu==1.8.0
 numpy==1.26.4
 
-# ── LLM – Gemini ────────────────────────────────────────────────
+# ── LLM – Gemini (primary) ─────────────────────────────────────────────────────
 google-generativeai==0.7.2
 
-# ── Utilities ───────────────────────────────────────────────────
+# ── LLM – OpenAI (optional fallback) ──────────────────────────────────────────
+# Uncomment the line below if you want to use OpenAI as the LLM provider
+# openai>=1.30.0
+
+# ── Utilities ──────────────────────────────────────────────────────────────────
 python-dotenv==1.0.1
 pydantic==2.7.4
 aiofiles==23.2.1

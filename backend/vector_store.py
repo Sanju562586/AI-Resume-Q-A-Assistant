@@ -91,7 +91,9 @@ def retrieve(document_id: str, query: str, top_k: int = 5) -> List[Dict[str, Any
         metadata: List[Dict[str, Any]] = json.load(f)
 
     query_vec = np.array([embed_query(query)], dtype="float32")
-    distances, indices = index.search(query_vec, top_k)
+    # Clamp top_k to the actual number of indexed vectors
+    actual_top_k = min(top_k, index.ntotal)
+    distances, indices = index.search(query_vec, actual_top_k)
 
     results = []
     for dist, idx in zip(distances[0], indices[0]):
@@ -102,6 +104,25 @@ def retrieve(document_id: str, query: str, top_k: int = 5) -> List[Dict[str, Any
         results.append(entry)
 
     return results
+
+
+def retrieve_all(document_id: str) -> List[Dict[str, Any]]:
+    """
+    Return every chunk stored for the document (useful for summary/skills/interview endpoints).
+
+    Args:
+        document_id: Resume to load.
+
+    Returns:
+        List of all metadata dicts (chunk_id, text, source).
+    """
+    if not os.path.exists(_meta_path(document_id)):
+        raise FileNotFoundError(
+            f"No metadata found for document '{document_id}'. "
+            "Please upload the resume first."
+        )
+    with open(_meta_path(document_id), "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
 def document_exists(document_id: str) -> bool:

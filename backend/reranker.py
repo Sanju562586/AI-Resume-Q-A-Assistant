@@ -77,21 +77,36 @@ def rerank(
     # predict() returns a numpy array of raw logit scores
     scores = reranker.predict(pairs, show_progress_bar=False)
 
-    # Attach scores to chunk dicts (copy to avoid mutating caller's data)
-    scored = []
+    # We define "relevant for sure" as having a cross-encoder score > 0.0
+    confident_chunks = []
+    other_chunks = []
+    
     for chunk, score in zip(chunks, scores):
         entry = dict(chunk)
         entry["rerank_score"] = float(score)
-        scored.append(entry)
+        if entry["rerank_score"] > 0.0:
+            confident_chunks.append(entry)
+        else:
+            # Keep original FAISS retrieval order for fallback
+            other_chunks.append(entry)
 
-    # Sort descending by cross-encoder score and take top-n
-    scored.sort(key=lambda c: c["rerank_score"], reverse=True)
+    # Sort confident chunks descending by cross-encoder score
+    confident_chunks.sort(key=lambda c: c["rerank_score"], reverse=True)
+
+    # Take up to top_n from the confident chunks
+    result = confident_chunks[:top_n]
+
+    # If we haven't filled the top_n slots, pad with the remaining chunks from FAISS
+    if len(result) < top_n:
+        slots_to_fill = top_n - len(result)
+        result.extend(other_chunks[:slots_to_fill])
 
     logger.debug(
-        "Reranked %d → %d chunks | top score=%.3f",
+        "Reranked %d → %d chunks | confident=%d | top score=%.3f",
         len(chunks),
-        min(top_n, len(scored)),
-        scored[0]["rerank_score"] if scored else 0.0,
+        len(result),
+        len(confident_chunks),
+        result[0]["rerank_score"] if result else 0.0,
     )
 
-    return scored[:top_n]
+    return result

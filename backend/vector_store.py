@@ -13,8 +13,10 @@ Directory layout (inside ./faiss_store/):
 """
 import json
 import os
+import shutil
 from typing import List, Dict, Any
 
+# pyrefly: ignore [missing-import]
 import faiss
 import numpy as np
 
@@ -128,3 +130,36 @@ def retrieve_all(document_id: str) -> List[Dict[str, Any]]:
 def document_exists(document_id: str) -> bool:
     """Return True if a FAISS index exists for the given document."""
     return os.path.exists(_index_path(document_id))
+
+
+def list_documents() -> List[str]:
+    """
+    Return a list of all document IDs that have been indexed.
+
+    Returns:
+        List of document ID strings (UUID format).
+    """
+    if not os.path.exists(STORE_DIR):
+        return []
+    return [
+        d for d in os.listdir(STORE_DIR)
+        if os.path.isdir(os.path.join(STORE_DIR, d))
+        and os.path.exists(_index_path(d))
+    ]
+
+
+def delete_document(document_id: str) -> bool:
+    """
+    Delete a document's FAISS index and metadata from disk.
+
+    Args:
+        document_id: The document to remove.
+
+    Returns:
+        True if the document existed and was deleted, False if not found.
+    """
+    doc_dir = os.path.join(STORE_DIR, document_id)
+    if os.path.isdir(doc_dir):
+        shutil.rmtree(doc_dir)
+        return True
+    return False

@@ -8,13 +8,15 @@ An intelligent resume analysis tool powered by **FastAPI**, **FAISS**, **BGE emb
 
 | Feature | Description |
 |---|---|
-| 📤 **Resume Upload** | PDF, DOCX, TXT |
+| 📤 **Resume Upload** | PDF, DOCX, TXT (up to 10 MB) |
 | 🔍 **Q&A** | Ask any question about the resume |
 | 📝 **Summary** | Auto-generated professional summary |
 | 🛠️ **Skills Extraction** | Categorised technical skills list |
 | 🎯 **Interview Questions** | 10 tailored interview questions |
+| 🕐 **Conversation History** | Expandable log of every Q&A in the session |
 | ⚡ **Vector Search** | FAISS + BGE-small embeddings |
 | 🧠 **LLM** | Google Gemini 2.5 Flash (OpenAI fallback) |
+| 🗑️ **Document Cleanup** | Delete indexed documents via API |
 
 ---
 
@@ -148,7 +150,33 @@ Generate 10 tailored interview questions.
 ### `GET /health`
 Health check.
 
-**Response:** `{ "status": "ok", "service": "AI Resume Q&A API" }`
+**Response:** `{ "status": "ok", "service": "AI Resume Q&A API", "version": "1.0.0" }`
+
+---
+
+### `GET /documents`
+List all currently indexed document IDs.
+
+**Response:**
+```json
+{
+  "documents": ["uuid-1", "uuid-2"],
+  "count": 2
+}
+```
+
+---
+
+### `DELETE /document/{document_id}`
+Delete a resume's vector index and the uploaded file.
+
+**Response:**
+```json
+{
+  "message": "Document 'uuid-string' deleted successfully.",
+  "document_id": "uuid-string"
+}
+```
 
 ---
 

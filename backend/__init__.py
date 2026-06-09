@@ -8,6 +8,8 @@ from backend.rag_pipeline import (
     summarize_resume,
     get_interview_questions,
     extract_skills,
+    list_all_documents,
+    remove_document,
 )
 
 __all__ = [
@@ -16,4 +18,6 @@ __all__ = [
     "summarize_resume",
     "get_interview_questions",
     "extract_skills",
+    "list_all_documents",
+    "remove_document",
 ]

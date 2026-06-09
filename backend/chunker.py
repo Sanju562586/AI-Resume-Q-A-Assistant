@@ -8,7 +8,7 @@ preserving as much semantic context as possible per chunk.
 """
 from typing import List
 
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 # ── Configuration ─────────────────────────────────────────────────────────────
 CHUNK_SIZE = 500        # characters per chunk

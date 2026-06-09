@@ -8,27 +8,32 @@ pdfplumber==0.11.0
 python-docx==1.1.2
 PyPDF2==3.0.1
 
-# ── LangChain (text splitting) ─────────────────────────────────────────────────
-langchain==0.2.6
-langchain-community==0.2.6
-langchain-core==0.2.10
+# ── LangChain (text splitting only) ───────────────────────────────────────────
+# 0.3.x is the first release that drops the numpy<2.0 constraint,
+# making it compatible with Python 3.13.
+langchain>=0.3.0
+langchain-community>=0.3.0
+langchain-core>=0.3.0
+langchain-text-splitters>=0.3.0
 
 # ── Embeddings ─────────────────────────────────────────────────────────────────
-sentence-transformers==3.0.1
-torch>=2.0.0          # pulled in by sentence-transformers; explicit pin avoids surprises
+sentence-transformers>=3.0.1
+# torch is pulled in automatically by sentence-transformers
 
 # ── Vector Database ────────────────────────────────────────────────────────────
-faiss-cpu==1.8.0
-numpy==1.26.4
+# faiss-cpu 1.8.0 has no Python 3.13 wheel; >=1.9.0 does.
+faiss-cpu>=1.9.0
+# numpy 1.x dropped Python 3.13 support; 2.x is required.
+numpy>=2.0.0
 
 # ── LLM – Gemini (primary) ─────────────────────────────────────────────────────
-google-generativeai==0.7.2
+google-generativeai>=0.7.2
 
 # ── LLM – OpenAI (optional fallback) ──────────────────────────────────────────
-# Uncomment the line below if you want to use OpenAI as the LLM provider
+# Uncomment if you want to use OpenAI instead of Gemini:
 # openai>=1.30.0
 
 # ── Utilities ──────────────────────────────────────────────────────────────────
 python-dotenv==1.0.1
-pydantic==2.7.4
-aiofiles==23.2.1
+pydantic>=2.7.4
+aiofiles>=23.2.1

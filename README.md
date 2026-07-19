@@ -22,7 +22,7 @@ An intelligent, full-stack application for analyzing resumes using Retrieval-Aug
   <br/>
 
   <img src="image.png" alt="Q&A Interaction and Skills Breakdown" width="800" />
-  <p><em>Figure 2: Q&A Interaction and Skills Breakdown</em></p>
+  <p><em>Figure 2: Q&A Interaction and Projects Breakdown</em></p>
 </div>
 
 ---

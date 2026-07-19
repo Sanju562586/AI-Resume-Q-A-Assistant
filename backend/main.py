@@ -74,7 +74,6 @@ async def lifespan(app: FastAPI):
     logger.info("🔴  Server shutting down.")
 
 
-# ── App setup ──────────────────────────────────────────────────────────────────
 # ── App setup ────────────────────────────────────────────────────────────────
 UPLOADS_DIR = Path(__file__).parent.parent / "uploads"
 ALLOWED_EXTENSIONS = {".pdf", ".docx", ".txt"}
